@@ -1,0 +1,47 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+    tenant_id: default
+
+scrape_configs:
+  # System logs (auth, syslog)
+  - job_name: syslog
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: syslog
+          __path__: /var/log/syslog
+
+  # Nginx access logs
+  - job_name: nginx
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: nginx
+          __path__: /var/log/nginx/access.log
+
+  # Nginx error logs
+  - job_name: nginx_error
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: nginx_error
+          __path__: /var/log/nginx/error.log
+
+  # Crowdsec logs
+  - job_name: crowdsec
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: crowdsec
+          __path__: /var/log/crowdsec.log
